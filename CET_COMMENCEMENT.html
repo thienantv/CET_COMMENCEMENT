@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CET COMMENCEMENT 2026 — Thiệp Mời Tốt Nghiệp</title>
+
+    <!-- Meta tags -->
+    <meta property="og:title" content="Thiệp Mời Lễ Tốt Nghiệp — CET COMMENCEMENT 2026">
+    <meta property="og:description"
+        content="Trân trọng kính mời bạn đến chung vui tại Lễ Bế giảng & Trao bằng Tốt nghiệp 2026 - Trường Kỹ thuật và Công nghệ, Đại học Trà Vinh.">
+    <meta property="og:type" content="website">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            900: '#0a1122',
+                            800: '#111d36',
+                            700: '#1a2b4c',
+                        },
+                        gold: {
+                            300: '#FDE047',
+                            400: '#FACC15',
+                            500: '#D4AF37', /* Classic Gold */
+                            600: '#AA771C',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Lora"', 'serif'],
+                        script: ['"Great Vibes"', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Ambient Background */
+        body {
+            background-color: #121212;
+            background-image: radial-gradient(circle at center, #2c2d30 0%, #0a0a0a 100%);
+            color: #333;
+            font-family: 'Lora', serif;
+            margin: 0;
+            overflow: hidden;
+            /* Prevent scrolling, controlled by JS scaling */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Paper Textures */
+        .texture-paper-light {
+            background-color: #fdfbf7;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E");
+        }
+
+        .texture-paper-navy {
+            background-color: #1a2b4c;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+        }
+
+        /* Gold Text Effect */
+        .text-gold-foil {
+            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 3D Scene Container */
+        #card-scene {
+            perspective: 2500px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Wrapper dùng để Scale kích thước thiệp vừa vặn màn hình */
+        #scale-wrapper {
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            transform-origin: center center;
+        }
+
+        /* Kích thước và Cơ chế mở cuốn thiệp */
+        .book-container {
+            position: relative;
+            width: 400px;
+            /* Kích thước thực tế của 1 trang */
+            height: 600px;
+            transform-style: preserve-3d;
+            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Khi thiệp mở, tịnh tiến toàn bộ khối sang phải 50% để kẹp giữa màn hình */
+        .book-container.is-open {
+            transform: translateX(50%);
+        }
+
+        /* Các định dạng dùng chung cho trang giấy */
+        .book-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            transform-style: preserve-3d;
+        }
+
+        /* Trang Phải (Cố định ở dưới) */
+        .right-page {
+            z-index: 1;
+            /* Đổ bóng tự nhiên cho đế thiệp */
+            box-shadow: 15px 25px 50px rgba(0, 0, 0, 0.5), inset 35px 0 50px rgba(0, 0, 0, 0.05);
+            border-left: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        /* Bản lề nếp gấp và nắp bìa (Trang Trái) */
+        .left-flap {
+            z-index: 10;
+            transform-origin: left center;
+            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Hiệu ứng xoay mở 180 độ */
+        .book-container.is-open .left-flap {
+            transform: rotateY(-180deg);
+        }
+
+        /* Hiệu ứng mồi (Hé mở bìa) khi Hover */
+        .book-container:not(.is-open) .left-flap:hover {
+            transform: rotateY(-6deg);
+            box-shadow: 10px 20px 40px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+        }
+
+        .book-container:not(.is-open) .left-flap {
+            box-shadow: 10px 20px 50px rgba(0, 0, 0, 0.6);
+        }
+
+        /* 2 Mặt của tờ giấy bìa (Mặt ngoài và Mặt trong) */
+        .flap-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .front-cover {
+            z-index: 2;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .back-cover {
+            transform: rotateY(180deg);
+            /* Mặt sau mặc định úp vào trong */
+            z-index: 1;
+            /* Đổ bóng cho trang bên trái khi mở ra */
+            box-shadow: -15px 25px 50px rgba(0, 0, 0, 0.5), inset -35px 0 50px rgba(0, 0, 0, 0.05);
+            border-right: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        /* Hiệu ứng gợi ý click */
+        .pulse-hint {
+            animation: pulse-opacity 2s infinite;
+        }
+
+        @keyframes pulse-opacity {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Môi trường Không gian 3D -->
+    <div id="card-scene">
+
+        <!-- Khối chứa Scale tự động (Giúp Responsive 100% mọi màn hình) -->
+        <div id="scale-wrapper">
+
+            <!-- Vật thể Cuốn Thiệp (The Book) -->
+            <div id="card-book" class="book-container">
+
+                <!-- ============================================== -->
+                <!-- TRANG BÊN PHẢI (Mặt đáy nằm cố định) -->
+                <!-- ============================================== -->
+                <div class="book-page right-page texture-paper-light">
+                    <!-- Gáy giấy đổ bóng (Tạo chiều sâu nếp gấp) -->
+                    <div
+                        class="absolute top-0 left-0 w-12 h-full bg-gradient-to-r from-black/15 to-transparent pointer-events-none z-0">
+                    </div>
+
+                    <div class="relative z-10 p-10 h-full flex flex-col justify-between">
+
+                        <!-- Header Trang Phải -->
+                        <div class="text-center space-y-4">
+                            <br><br>
+                            <h3 class="font-serif text-xl font-bold text-gray-800 text-gold-foil tracking-wide">CHI TIẾT</h3>
+                            <!-- <div class="w-16 h-[1px] bg-gold-500/40 mx-auto"></div> -->
+                        </div>
+
+                        <!-- Nội dung Thông tin sự kiện -->
+                        <div
+                            class="space-y-6 text-center border border-gold-500/20 bg-white/40 p-6 rounded relative before:absolute before:inset-2 before:border before:border-gold-500/10 pointer-events-none">
+                            <div class="relative z-10 pointer-events-auto">
+                                <h4 class="font-serif font-bold text-gray-800 text-lg mb-1">THỜI GIAN</h4>
+                                <p id="event-time-display" class="font-sans text-gray-700 font-medium">07:00, Thứ Bảy,
+                                    24/10/2026</p>
+                            </div>
+                            <div class="w-8 h-[1px] bg-gold-500/30 mx-auto relative z-10"></div>
+                            <div class="relative z-10 pointer-events-auto">
+                                <h4 class="font-serif font-bold text-gray-800 text-lg mb-1">ĐỊA ĐIỂM</h4>
+                                <p id="event-location-display" class="font-sans text-gray-700 leading-relaxed">Giảng
+                                    đường D5 — Khu I<br>Đại học Trà Vinh</p>
+                            </div>
+                        </div>
+
+                        <!-- Khu vực Tương tác (Countdown & Nút chức năng) -->
+                        <div class="space-y-6">
+
+                            <!-- Đồng hồ đếm ngược -->
+                            <div
+                                class="grid grid-cols-4 gap-2 text-center text-gray-800 border-t border-gold-500/30 pt-4">
+                                <div>
+                                    <div id="cd-days" class="font-serif text-2xl font-bold text-gold-600">00</div>
+                                    <div class="text-[10px] uppercase tracking-widest text-gray-500 font-medium">Ngày
+                                    </div>
+                                </div>
+                                <div>
+                                    <div id="cd-hours" class="font-serif text-2xl font-bold text-gold-600">00</div>
+                                    <div class="text-[10px] uppercase tracking-widest text-gray-500 font-medium">Giờ
+                                    </div>
+                                </div>
+                                <div>
+                                    <div id="cd-minutes" class="font-serif text-2xl font-bold text-gold-600">00</div>
+                                    <div class="text-[10px] uppercase tracking-widest text-gray-500 font-medium">Phút
+                                    </div>
+                                </div>
+                                <div>
+                                    <div id="cd-seconds" class="font-serif text-2xl font-bold text-gold-600">00</div>
+                                    <div class="text-[10px] uppercase tracking-widest text-gray-500 font-medium">Giây
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="flex flex-col gap-3">
+                                <a id="btn-google-map" href="#" target="_blank"
+                                    class="block w-full py-3 bg-navy-800 hover:bg-navy-900 text-gold-300 font-sans text-sm tracking-widest uppercase text-center transition-colors rounded border border-gold-500/30 shadow-md">
+                                    Xem Bản Đồ
+                                </a>
+                                <button onclick="closeCard()"
+                                    class="text-xs text-gray-500 hover:text-gray-800 underline tracking-wider transition-colors">
+                                    Đóng thiệp
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- ============================================== -->
+                <!-- CÁNH CỬA BÊN TRÁI (Lật bản lề 180 độ) -->
+                <!-- ============================================== -->
+                <div id="left-flap" class="book-page left-flap" onclick="openCard()">
+
+                    <!-- BÌA NGOÀI CỦA THIỆP -->
+                    <div class="flap-face front-cover texture-paper-navy flex flex-col justify-center items-center p-8">
+
+                        <!-- Viền trang trí Bìa -->
+                        <div class="absolute inset-4 border border-gold-500/30 pointer-events-none"></div>
+                        <div class="absolute inset-5 border border-gold-500/10 pointer-events-none"></div>
+
+                        <!-- Nội dung Bìa Tối Giản -->
+                        <div class="text-center relative z-10 w-full">
+                            <!-- <p class="font-sans text-xs text-gold-300/60 uppercase tracking-[0.4em] mb-6">Trân Trọng Kính Mời</p> -->
+
+                            <h1 class="font-serif text-3xl font-black text-gold-foil tracking-widest leading-tight">
+                                CET<br>COMMENCEMENT
+                            </h1>
+
+                            <div class="w-16 h-[1px] bg-gold-500/40 mx-auto my-6"></div>
+                            <p class="font-sans text-sm text-gold-300/80 uppercase tracking-[0.3em]">2026</p>
+                        </div>
+
+                        <!-- Lời nhắc click lật mở -->
+                        <p
+                            class="absolute bottom-10 font-sans text-[11px] text-gray-400 tracking-widest pulse-hint uppercase pointer-events-none">
+                            Nhấp để lật mở thiệp
+                        </p>
+                    </div>
+
+                    <!-- MẶT TRONG CỦA BÌA (TRANG BÊN TRÁI SAU KHI MỞ) -->
+                    <div class="flap-face back-cover texture-paper-light">
+                        <!-- Gáy giấy đổ bóng (Tạo chiều sâu nếp gấp) -->
+                        <div
+                            class="absolute top-0 right-0 w-12 h-full bg-gradient-to-l from-black/15 to-transparent pointer-events-none z-0">
+                        </div>
+
+                        <div
+                            class="relative z-10 p-10 h-full flex flex-col justify-center items-center text-center space-y-10">
+
+                            <!-- Lời chào Ẩn danh / Đích danh -->
+                            <div>
+                                <p class="font-sans text-sm tracking-[0.2em] text-gray-500 uppercase mb-2">Trân trọng
+                                    kính mời</p>
+                                <!-- <h2 id="guest-name-display" class="font-serif text-3xl font-bold text-gray-800 italic">Quý mọi người</h2> -->
+                                <!-- <div class="w-8 h-[1px] bg-gold-500 mx-auto mt-4"></div> -->
+                                    <br>
+                                <p class="font-sans text-sm tracking-widest text-gold-600 uppercase">Đến dự Lễ Bế giảng <br> và <br> Trao bằng Tốt nghiệp</p>
+                            </div>
+
+                            <!-- Thông tin Sinh viên -->
+                            <div class="flex flex-col items-center justify-center text-center space-y-3">
+
+                                <p class="font-sans text-xs text-gray-500 uppercase tracking-widest">
+                                    Tân Kỹ sư
+                                </p>
+
+                                <p id="student-major-display" class="font-serif text-sm text-gray-600 font-medium">
+                                    [NGÀNH HỌC]
+                                </p>
+                                <br>
+                                <h2 id="student-name-display"
+                                    class="font-script text-4xl text-gray-800 leading-tight break-words max-w-full px-4">
+                                    [HỌ VÀ TÊN]
+                                </h2>
+
+                            </div>
+
+                            <!-- Thông điệp lời mời -->
+                            <p class="font-serif italic text-[15px] text-gray-600 leading-relaxed px-4">
+                                Một hành trình khép lại
+                                <br> Một tương lai rộng mở
+                                <br> <br> Sự hiện diện của bạn là niềm vinh hạnh 
+                                <br> và là món quà ý nghĩa nhất dành cho mình.
+                            </p>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script>
+        /**
+         * ==============================================
+         * Cấu hình Thông tin (Giữ nguyên từ code gốc)
+         * ==============================================
+         */
+        const INVITATION_CONFIG = {
+            studentName: 'Nguyễn Thiên Ân',
+            studentMajor: 'Ngành: Công nghệ Thông tin',
+            eventTime: '07h00, Thứ Bảy ngày 24/10/2026',
+            eventLocation: 'Giảng đường D5 — Khu I, Đại học Trà Vinh',
+            eventDateISO: '2026-10-24T07:00:00+07:00',
+            mapUrl: 'https://maps.google.com/?cid=5357762873433947701'
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initUrlParameters();
+            renderConfigData();
+            startCountdown();
+            adjustScale(); // Tính toán kích thước ngay khi load
+            window.addEventListener('resize', adjustScale);
+        });
+
+        // Đổ dữ liệu Lời chào (Params ?to=)
+        function initUrlParameters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const guest = urlParams.get('to') || urlParams.get('guest') || '';
+            if (guest.trim()) {
+                document.getElementById('guest-name-display').innerText = decodeURIComponent(guest.trim());
+            }
+        }
+
+        // Đổ dữ liệu Config
+        function renderConfigData() {
+            document.getElementById('student-name-display').innerText = INVITATION_CONFIG.studentName;
+            document.getElementById('student-major-display').innerText = INVITATION_CONFIG.studentMajor;
+            document.getElementById('event-time-display').innerText = INVITATION_CONFIG.eventTime;
+            document.getElementById('event-location-display').innerHTML = INVITATION_CONFIG.eventLocation.replace(' — ', '<br>');
+            document.getElementById('btn-google-map').href = INVITATION_CONFIG.mapUrl;
+        }
+
+        /**
+         * ==============================================
+         * Logic Đóng / Mở Thiệp và Xử lý Tỷ Lệ (Scaling)
+         * ==============================================
+         */
+        function openCard() {
+            const book = document.getElementById('card-book');
+            if (book.classList.contains('is-open')) return; // Ngăn bấm 2 lần
+            book.classList.add('is-open');
+            adjustScale();
+        }
+
+        function closeCard() {
+            const book = document.getElementById('card-book');
+            // Cần delay nhẹ ngăn thẻ bên dưới ăn sự kiện click của bìa
+            setTimeout(() => {
+                book.classList.remove('is-open');
+                adjustScale();
+            }, 50);
+        }
+
+        /**
+         * Hàm tính toán tự động phóng to/thu nhỏ (CSS Scale)
+         * Giúp thiệp luôn vừa vặn hoàn hảo trên cả Mobile (dọc) và Desktop (ngang)
+         */
+        function adjustScale() {
+            const wrapper = document.getElementById('scale-wrapper');
+            const book = document.getElementById('card-book');
+            const isOpen = book.classList.contains('is-open');
+
+            const screenW = window.innerWidth;
+            const screenH = window.innerHeight;
+
+            // Kích thước chuẩn vật lý của cuốn thiệp gốc
+            const basePageWidth = 400;
+            const basePageHeight = 600;
+
+            // Chiều rộng tổng thể cần thiết (Cộng thêm padding viền an toàn 40px)
+            // Nếu đóng: Cần 400px bề ngang. Nếu mở: Cần 800px bề ngang.
+            const targetWidth = (isOpen ? (basePageWidth * 2) : basePageWidth) + 40;
+            const targetHeight = basePageHeight + 40;
+
+            // Tính tỷ lệ Scale so với màn hình thực tế
+            let scaleW = screenW / targetWidth;
+            let scaleH = screenH / targetHeight;
+
+            // Lấy tỷ lệ nhỏ nhất để đảm bảo thiệp luôn lọt lòng màn hình, Max Zoom = 1.1
+            let finalScale = Math.min(scaleW, scaleH, 1.1);
+
+            wrapper.style.transform = `scale(${finalScale})`;
+        }
+
+        /**
+         * ==============================================
+         * Đồng hồ Đếm ngược
+         * ==============================================
+         */
+        function startCountdown() {
+            const targetDate = new Date(INVITATION_CONFIG.eventDateISO).getTime();
+            const intervalId = setInterval(updateTimer, 1000);
+
+            function updateTimer() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    clearInterval(intervalId);
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('cd-days').innerText = String(days).padStart(2, '0');
+                document.getElementById('cd-hours').innerText = String(hours).padStart(2, '0');
+                document.getElementById('cd-minutes').innerText = String(minutes).padStart(2, '0');
+                document.getElementById('cd-seconds').innerText = String(seconds).padStart(2, '0');
+            }
+            updateTimer();
+        }
+    </script>
+</body>
+
+</html>
