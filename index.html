@@ -200,6 +200,29 @@
                 opacity: 0.8;
             }
         }
+
+
+        /* Ngăn người xem bôi đen và sao chép chữ trong thiệp */
+        body,
+        #card-scene,
+        #scale-wrapper,
+        #card-book,
+        #card-book * {
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        /* Giữ con trỏ chuột bình thường khi rê lên nội dung */
+        #card-book p,
+        #card-book h1,
+        #card-book h2,
+        #card-book h3,
+        #card-book h4,
+        #card-book div,
+        #card-book span {
+            cursor: default;
+        }
     </style>
 </head>
 
@@ -228,7 +251,8 @@
                         <!-- Header Trang Phải -->
                         <div class="text-center space-y-4">
                             <br><br>
-                            <h3 class="font-serif text-xl font-bold text-gray-800 text-gold-foil tracking-wide">CHI TIẾT</h3>
+                            <h3 class="font-serif text-xl font-bold text-gray-800 text-gold-foil tracking-wide">CHI TIẾT
+                            </h3>
                             <!-- <div class="w-16 h-[1px] bg-gold-500/40 mx-auto"></div> -->
                         </div>
 
@@ -340,8 +364,9 @@
                                     kính mời</p>
                                 <!-- <h2 id="guest-name-display" class="font-serif text-3xl font-bold text-gray-800 italic">Quý mọi người</h2> -->
                                 <!-- <div class="w-8 h-[1px] bg-gold-500 mx-auto mt-4"></div> -->
-                                    <br>
-                                <p class="font-sans text-sm tracking-widest text-gold-600 uppercase">Đến dự Lễ Bế giảng <br> và <br> Trao bằng Tốt nghiệp</p>
+                                <br>
+                                <p class="font-sans text-sm tracking-widest text-gold-600 uppercase">Đến dự Lễ Bế giảng
+                                    <br> và <br> Trao bằng Tốt nghiệp</p>
                             </div>
 
                             <!-- Thông tin Sinh viên -->
@@ -366,7 +391,7 @@
                             <p class="font-serif italic text-[15px] text-gray-600 leading-relaxed px-4">
                                 Một hành trình khép lại
                                 <br> Một tương lai rộng mở
-                                <br> <br> Sự hiện diện của bạn là niềm vinh hạnh 
+                                <br> <br> Sự hiện diện của bạn là niềm vinh hạnh
                                 <br> và là món quà ý nghĩa nhất dành cho tôi.
                             </p>
 
